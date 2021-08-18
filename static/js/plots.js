@@ -1,60 +1,49 @@
-function buildSampledata(sample) {
+function buildMetadata(sample) {
     d3.json("samples.json").then((data) => {
-      var sampledata = data.sampledata;
-      // Filter the data 
-      var resultArray = sampledata.filter(sampleObj => sampleObj.id == sample);
+      var metadata = data.sampledata;
+      var resultArray = metadata.filter(sampleobject => sampleobject.id == sample);
       var result = resultArray[0];
-      // Use d3 to select the panel with id of `#sample-sampledata`
       var PANEL = d3.select("#sample-sampledata");
   
-      // Use `.html("") to clear any existing sampledata
-      PANEL.html("");
-  
-      // Use `Object.entries` to add each key and value pair to the panel
-      // Hint: Inside the loop, you will need to use d3 to append new
-      // tags for each key-value in the sampledata.
       Object.entries(result).forEach(([key, value]) => {
-        PANEL.append("h6").text(`${key.toUpperCase()}: ${value}`);
+        PANEL.append("h6").text(`${key}: ${value}`);
       });
-  
-      // BONUS: Build the Gauge Chart
-      buildGauge(result.wfreq);
     });
   }
   
   function buildCharts(sample) {
     d3.json("samples.json").then((data) => {
       var samples = data.samples;
-      var resultArray = samples.filter(sampleObj => sampleObj.id == sample);
-      var result = resultArray[0];
+      var resultsArray = samples.filter(sampleobject => sampleobject.id == sample);
+      var result = resultsArray[0];
   
-      var otu_ids = result.otu_ids;
-      var otu_labels = result.otu_labels;
-      var sample_values = result.sample_values;
+      var ids = result.otu_ids;
+      var labels = result.otu_labels;
+      var values = result.sample_values;
   
       // Build a Bubble Chart
-      var bubbleLayout = {
-        title: "Bacteria Cultures Per Sample",
+      var Layout_Bubble = {
+        title: "Bacteria Cultures",
         margin: { t: 0 },
-        hovermode: "closest",
+        hovermode: "nearest",
         xaxis: { title: "OTU ID" },
         margin: { t: 30}
       };
-      var bubbleData = [
+      var Data_Bubble = [
         {
-          x: otu_ids,
-          y: sample_values,
-          text: otu_labels,
+          x: ids,
+          y: values,
+          text: labels,
           mode: "markers",
           marker: {
-            size: sample_values,
-            color: otu_ids,
+            color: ids,
+            size: values,
             colorscale: "Earth"
           }
         }
       ];
   
-      Plotly.newPlot("bubble", bubbleData, bubbleLayout);
+      Plotly.newPlot("bubble", Data_Bubble, Layout_Bubble);
   
       var yticks = otu_ids.slice(0, 10).map(otuID => `OTU ${otuID}`).reverse();
       var barData = [

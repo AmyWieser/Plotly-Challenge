@@ -1,18 +1,18 @@
-function buildSampledata(sample) {
-    d3.json("samples.json").then((data) => {
-      var sampledata = data.sampledata;
-      // Filter the data 
-      var resultArray = sampledata.filter(sampleObj => sampleObj.id == sample);
+function buildMetadata(sample) {
+    d3.json("data/samples.json").then((data) => {
+      var metadata = data.metadata;
+      // Filter the data for the object with the desired sample number
+      var resultArray = metadata.filter(sampleObj => sampleObj.id == sample);
       var result = resultArray[0];
-      // Use d3 to select the panel with id of `#sample-sampledata`
-      var PANEL = d3.select("#sample-sampledata");
+      // Use d3 to select the panel with id of `#sample-metadata`
+      var PANEL = d3.select("#sample-metadata");
   
-      // Use `.html("") to clear any existing sampledata
+      // Use `.html("") to clear any existing metadata
       PANEL.html("");
   
       // Use `Object.entries` to add each key and value pair to the panel
       // Hint: Inside the loop, you will need to use d3 to append new
-      // tags for each key-value in the sampledata.
+      // tags for each key-value in the metadata.
       Object.entries(result).forEach(([key, value]) => {
         PANEL.append("h6").text(`${key.toUpperCase()}: ${value}`);
       });
@@ -23,7 +23,7 @@ function buildSampledata(sample) {
   }
   
   function buildCharts(sample) {
-    d3.json("samples.json").then((data) => {
+    d3.json("data/samples.json").then((data) => {
       var samples = data.samples;
       var resultArray = samples.filter(sampleObj => sampleObj.id == sample);
       var result = resultArray[0];
@@ -81,7 +81,7 @@ function buildSampledata(sample) {
     var selector = d3.select("#selDataset");
   
     // Use the list of sample names to populate the select options
-    d3.json("samples.json").then((data) => {
+    d3.json("data/samples.json").then((data) => {
       var sampleNames = data.names;
   
       sampleNames.forEach((sample) => {
@@ -106,4 +106,3 @@ function buildSampledata(sample) {
   
   // Initialize the dashboard
   init();
-  
